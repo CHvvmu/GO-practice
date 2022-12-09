@@ -1,0 +1,246 @@
+/*5.4 Практическая работа
+Что входит в работу:
+1. Определение координатной плоскости точки.
+2. Проверить, что одно из чисел — положительное.
+3. Проверить, что есть совпадающие числа.
+4. Сумма без сдачи.
+5. Определение максимальных процентов.
+6. Решение квадратного уравнения.
+7. Счастливый билет.
+8. По желанию. Игра «Угадай число».*/
+
+package main
+
+import (
+	"fmt"
+	"math"
+	"strconv"
+)
+
+func main() {
+
+	// Программа определяет к какой координатной четверти принадлежит точка.
+	fmt.Println("Задание 1. Определение координатной плоскости точки.")
+
+	fmt.Println("Введите координату X:")
+	var x int
+	fmt.Scan(&x)
+
+	fmt.Println("Введите координату Y:")
+	var y int
+	fmt.Scan(&y)
+
+	if x > 0 && y > 0 {
+		fmt.Println("Координатная плоскость 'I'")
+	} else if x < 0 && y > 0 {
+		fmt.Println("Координатная плоскость 'II'")
+	} else if x < 0 && y < 0 {
+		fmt.Println("Координатная плоскость 'III'")
+	} else if x > 0 && y < 0 {
+		fmt.Println("Координатная плоскость 'IV'")
+	} else {
+		fmt.Println("Это точка отсчета")
+	}
+	fmt.Println("__________________________________")
+
+	// Программа проверяет наличие хотя бы одного положительного числа.
+	fmt.Println("Задание 2. Проверить, что одно из чисел — положительное.")
+
+	fmt.Println("Введите первое число:")
+	var n1 int = 4
+	fmt.Scan(&n1)
+
+	fmt.Println("Введите второе число:")
+	var n2 int
+	fmt.Scan(&n2)
+
+	fmt.Println("Введите третье число:")
+	var n3 int
+	fmt.Scan(&n3)
+
+	if n1 > 0 || n2 > 0 || n3 > 0 {
+		fmt.Println("Одно из чисел положитеьное")
+	} else {
+		fmt.Println("Нет положительных чисел")
+	}
+	fmt.Println("__________________________________")
+
+	// Программа определяет совпадающие цифры.
+	fmt.Println("Задание 3. Проверить, что есть совпадающие числа.")
+
+	fmt.Println("Введите первое число:")
+	var d int
+	fmt.Scan(&d)
+
+	fmt.Println("Введите второе число:")
+	var e int
+	fmt.Scan(&e)
+
+	fmt.Println("Введите первое число:")
+	var f int = 3
+	fmt.Scan(&f)
+
+	if d == e || d == f || e == f {
+		fmt.Println("Есть совпадение чисел")
+	} else {
+		fmt.Println("Совпадений чисел нет")
+	}
+	fmt.Println("__________________________________")
+
+	// Программа определяет сдачу за покупку.
+	fmt.Println("Задание 4. Сумма без сдачи.")
+
+	fmt.Println("Введите стоимость товара:")
+	var costCommodity int
+	fmt.Scan(&costCommodity)
+
+	var coinAmount int
+
+	for i := 1; i < 4; i++ {
+		fmt.Println("Введите номинал", i, "монеты:")
+		var nominalMonet int
+		fmt.Scan(&nominalMonet)
+
+		coinAmount += nominalMonet
+		difference := costCommodity - coinAmount
+
+		if difference < 0 {
+			difference = -difference
+			fmt.Println("Достаточно. Получите", difference, "на  сдачу")
+			break
+		} else if difference == 0 {
+			fmt.Println("Достаточно денег. Получите товар")
+			break
+		} else if difference > 0 && i < 3 {
+			fmt.Println("Недостаточно средств.")
+		} else if difference > 0 && i == 3 {
+			fmt.Println("Недостаточно средств. Добавьте еще монету наминалом", difference)
+		}
+	}
+	fmt.Println("__________________________________")
+
+	// Программа определяет две выгодные процентные ставки из трех.
+	fmt.Println("Задание 5. Определение максимальных процентов.")
+
+	fmt.Println("Введите процентную ставку:")
+	var i1 int
+	fmt.Scan(&i1)
+
+	fmt.Println("Введите процентную ставку:")
+	var i2 int
+	fmt.Scan(&i2)
+
+	fmt.Println("Введите процентную ставку:")
+	var i3 int
+	fmt.Scan(&i3)
+
+	if i1 < i2 && i1 < i3 {
+		var i2, i3 string = "вторая", "третья"
+		fmt.Println("Наиболее выгодные процентные ставки", i2, "и", i3)
+	} else if i2 < i1 && i2 < i3 {
+		var i1, i3 string = "первая", "третья"
+		fmt.Println("Наиболее выгодные процентные ставки", i1, "и", i3)
+	} else if i3 < i2 && i3 < i1 {
+		var i1, i2 string = "первая", "вторая"
+		fmt.Println("Наиболее выгодные процентные ставки", i1, "и", i2)
+	} else if i1 == i2 && i1 == i3 {
+		fmt.Println("Все процентные ставки равны")
+	} else {
+		fmt.Println("В этом наборе только одна выгодная ставка")
+	}
+	fmt.Println("__________________________________")
+
+	// Программа вычисляет корни квадратного уравнения.
+	fmt.Println("Задание 6. Решение квадратного уравнения.")
+
+	fmt.Println("Введите коэффициент 'а':")
+	var a float64
+	fmt.Scan(&a)
+
+	fmt.Println("Введите коэффициент 'b':")
+	var b float64
+	fmt.Scan(&b)
+
+	fmt.Println("Введите коэффициент 'c':")
+	var c float64
+	fmt.Scan(&c)
+
+	discriminant := math.Pow(b, 2) - 4*(a*c)
+
+	if discriminant < 0 {
+		fmt.Println("У этого уравнения корней нет")
+	} else if discriminant == 0 {
+		x := -b / 2 * a
+		fmt.Println("Корень уравнения равен:\n х =", x)
+	} else if discriminant > 0 {
+		x1 := (-b + math.Sqrt(discriminant)) / 2 * a
+		x2 := (-(b) - math.Sqrt(discriminant)) / 2 * a
+		fmt.Println("Корни уравнения равны:\n х1 =", x1, "\n х2 =", x2)
+	}
+	fmt.Println("__________________________________")
+
+	// Программа определяет 4-значное число как зеркальное, счастливое или обычное.
+	fmt.Println("Задание 7. Счастливый билет.")
+T:
+	fmt.Println("Введите 4-значное число:")
+	var num0 string
+	fmt.Scan(&num0)
+
+	num1, _ := strconv.Atoi(num0)
+
+	if num1 == 0 {
+		fmt.Println("Повторите ввод числа")
+		goto T
+	}
+	placeA, _ := strconv.Atoi(string(num0[0]))
+
+	placeB, _ := strconv.Atoi(string(num0[1]))
+
+	placeC, _ := strconv.Atoi(string(num0[2]))
+
+	placeD, _ := strconv.Atoi(string(num0[3]))
+
+	num2 := num1 + 999*placeA + 90*placeB - 90*placeC - 999*placeD
+
+	if num1 == num2 {
+		fmt.Println("Введенное число зеркальное")
+	} else if placeA+placeB == placeC+placeD {
+		fmt.Println("Введенное число счастливое")
+	} else {
+		fmt.Println("Введенное число обычное")
+	}
+	fmt.Println("__________________________________")
+
+	// Программа угадывает загаданное число от 1 до 10.
+
+	fmt.Println("Задание 8. Игра «Угадай число».")
+
+	fmt.Println("Загадайте число от 1 до 10.")
+	fmt.Println("По готовности введите '!'")
+
+	var start string
+	fmt.Scan(&start)
+
+	min := 1
+	max := 10
+M:
+	quest := (min + max) / 2
+	fmt.Println("Загаданное число", quest, "? Введите '=', если число угадано.\n Если число больше, '>'.\n Если загаданное число меньше '<'")
+
+	var answer string
+	fmt.Scan(&answer)
+
+	if answer == "=" {
+		fmt.Println(" Число угадано")
+		return
+	} else if answer == ">" {
+		min = quest + 1
+		goto M
+	} else if answer == "<" {
+		max = quest - 1
+		goto M
+	} else {
+		fmt.Println("Некорректный ввод", answer)
+		goto M
+	}
+}

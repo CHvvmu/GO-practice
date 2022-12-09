@@ -1,0 +1,62 @@
+/*15.5 Практическая работа
+Что входит в работу:
+1. Подсчитать чётные и нечётные числа в массиве.
+2. Написать функцию, реверсирующую массив.
+*/
+
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+
+	// Функция, принимает на вход массив и возвращает массив,
+	// в котором элементы идут в обратном порядке по сравнению с исходным.
+	fmt.Println("Задание 1. Подсчёт чётных и нечётных чисел в массиве.")
+
+	var digits [10]int
+	fmt.Println("Для продолжения введите 10 цифр:")
+	for d, _ := range digits {
+		fmt.Scan(&digits[d])
+	}
+
+	var evenNumbers int
+	var oddNumbers int
+	for i := 0; i < 10; i++ {
+		check := digits[i] % 2
+		if check == 0 {
+			evenNumbers++
+		} else {
+			oddNumbers++
+		}
+	}
+	fmt.Printf("чётных — %d, нечётных — %d\n\n", evenNumbers, oddNumbers)
+	fmt.Println("_______________________________________________________")
+
+	// Программа через функцию реверсирует массив.
+	fmt.Println("Задание 2. Функция, реверсирующая массив.")
+
+	var number [10]int
+	fmt.Println("Введите последовательность из 10 цифр:")
+	for i, _ := range number {
+		fmt.Scan(&number[i])
+	}
+	fmt.Println("Введен массив:", number)
+
+	reversNumber := reverseArray(number)
+	fmt.Println("Реверсированный массив:", reversNumber)
+
+	fmt.Println("---------End------------")
+}
+
+func reverseArray(num [10]int) [10]int {
+	n := len(num) - 1
+	var reversN [10]int
+	for _, v := range num {
+		reversN[n] = v
+		n--
+	}
+	return reversN
+}

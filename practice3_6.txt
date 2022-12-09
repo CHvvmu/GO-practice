@@ -1,0 +1,241 @@
+/*3.5 Практическая работа ()
+Что входит в работу:
+1. Конструктор квестов.
+2. Симулятор маршрутки.
+3. Обмен местами.
+4. По желанию.Злостные вредители.
+5. По желанию.Повышаем градус сложности.*/
+
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	// Программа конструктора текстовых квестов.
+	fmt.Println("1. Конструктор квестов.")
+
+	fmt.Println("Введите название планеты:")
+	var Planet string
+	fmt.Scan(&Planet)
+
+	fmt.Println("Введите название звёздной системы:")
+	var Star string
+	fmt.Scan(&Star)
+
+	fmt.Println("Введите имя рейнджера:")
+	var Ranger string
+	fmt.Scan(&Ranger)
+
+	fmt.Println("Введите сумму вознаграждения:")
+	var Money int
+	fmt.Scan(&Money)
+
+	fmt.Println("")
+	fmt.Print("«Как вам, ", Ranger, ", известно, мы раса мирная, поэтому на наших военных кораблях используются наёмники с других планет. Система набора отработана давным-давно. Обычно мы приглашаем на наши корабли людей с планеты ", Planet, " системы ", Star, ".\n")
+	fmt.Println("")
+
+	fmt.Print("Но случилась неприятность: в связи с большими потерями в последнее время престиж профессии сильно упал, и теперь не так-то просто завербовать призывников. Главный комиссар планеты ", Planet, ", впрочем, отлично справлялся, но недавно его наградили орденом Сутулого с закруткой на спине, и его на радостях парализовало! Призыв под угрозой срыва!\n")
+	fmt.Println("")
+
+	fmt.Print(Ranger, ", вы должны прибыть на планету ", Planet, " системы ", Star, " и помочь выполнить план призыва. Мы готовы выплатить вам премию в ", Money, " кредитов за эту маленькую услугу».\n")
+	fmt.Println("__________________________________")
+
+	// Программа симуляции работы маршрутного такси.
+	fmt.Println("2. Симулятор маршрутки.")
+
+	fmt.Println("Программа симуляции работы маршрутного такси.")
+	//Первая остановка
+	fmt.Println("Прибываем на остановку «Улица Программистов».")
+	totalPassengers := 0
+	servicePrice := 20 * totalPassengers
+	fmt.Println("В салоне пассажиров:", totalPassengers)
+
+	var outPpassengers int
+	fmt.Println("Сколько пассажиров вышло на остановке:")
+	fmt.Scan(&outPpassengers)
+
+	var enteredPassengers int
+	fmt.Println("Сколько пассажиров вошло на остановке:")
+	fmt.Scan(&enteredPassengers)
+
+	servicePrice += 20 * enteredPassengers
+	totalPassengers += enteredPassengers - outPpassengers
+	fmt.Println("Отправляемся с остановки «Улица Программистов».")
+	fmt.Println("В салоне пассажиров:", totalPassengers)
+	fmt.Println("-----------Едем---------")
+	//Вторая остановка
+	fmt.Println("Прибываем на остановку «Проспект Алгоритмов».")
+	fmt.Println("В салоне пассажиров:", totalPassengers)
+
+	fmt.Println("Сколько пассажиров вышло на остановке:")
+	fmt.Scan(&outPpassengers)
+
+	fmt.Println("Сколько пассажиров вошло на остановке:")
+	fmt.Scan(&enteredPassengers)
+
+	servicePrice += 20 * enteredPassengers
+	totalPassengers += enteredPassengers - outPpassengers
+	fmt.Println("Отправляемся с остановки «Проспект Алгоритмов».")
+	fmt.Println("В салоне пассажиров:", totalPassengers)
+	fmt.Println("-----------Едем---------")
+	//Третья остановка
+	fmt.Println("Прибываем на остановку «Площадь Итерации».")
+	fmt.Println("В салоне пассажиров:", totalPassengers)
+
+	fmt.Println("Сколько пассажиров вышло на остановке:")
+	fmt.Scan(&outPpassengers)
+
+	fmt.Println("Сколько пассажиров вошло на остановке:")
+	fmt.Scan(&enteredPassengers)
+
+	servicePrice += 20 * enteredPassengers
+	totalPassengers += enteredPassengers - outPpassengers
+	fmt.Println("Отправляемся с остановки «Площадь Итерации».")
+	fmt.Println("В салоне пассажиров:", totalPassengers)
+	fmt.Println("-----------Едем---------")
+	//Четвертая остановка
+	fmt.Println("Прибываем на остановку «Серверная сторона - конечная».")
+	fmt.Println("-----------Маршрутка дальше не едет---------")
+	fmt.Println("Сколько пассажиров вышло на остановке:")
+	fmt.Println(totalPassengers)
+	totalPassengers -= totalPassengers
+	fmt.Println("В салоне пассажиров:", totalPassengers)
+
+	//Вывод (после прибытия на последнюю остановку):
+	salaryDriver := 25
+	costsFuel := 20
+	taxes := 20
+	costsRepair := 20
+	totalIncome := servicePrice - (salaryDriver + costsFuel + taxes + costsRepair)
+
+	fmt.Println("Всего заработали:", servicePrice, "рублей.")
+	fmt.Println("Зарплата водителя:", salaryDriver, "рублей.")
+	fmt.Println("Расходы на топливо:", costsFuel, "рублей.")
+	fmt.Println("Налоги:", taxes, "рублей.")
+	fmt.Println("Расходы на ремонт машины:", costsRepair, "рублей.")
+	fmt.Println("Итого доход:", totalIncome, "рублей.")
+	fmt.Println("__________________________________")
+
+	// Программа меняет местами значения переменных.
+	fmt.Println("3. Обмен местами.")
+
+	fmt.Println("Обмен местами значений переменных")
+	a := 42
+	b := 153
+	fmt.Println("a:", a)
+	fmt.Println("b:", b)
+	c := a
+	a = b
+	b = c
+	fmt.Println("a:", a)
+	fmt.Println("b:", b)
+	fmt.Println("__________________________________")
+
+	// Программа расчета прироста бамбука.
+	fmt.Println("4. Злостные вредители.")
+	fmt.Println("4.1 Расчет высоты бамбука к середине третьего дня.")
+
+	var heightBamboo float32 = 100  //Начальная высота саженца (см)
+	var timeGrowth float32 = 2.5    //Расчетный период (сутки)
+	var incrementDaily float32 = 50 //Суточный рост (см)
+
+	increment := incrementDaily * timeGrowth
+
+	var timeLossGrowth float32 = 2 //Время активного питания гусениц (ночь)
+	var lossGrowth float32 = 20    //Потери роста за ночь (см)
+
+	loss := lossGrowth * timeLossGrowth
+	heightBamboo += increment - loss
+
+	fmt.Println("Высота бамбука через", timeGrowth, "суток будет", heightBamboo, "сантиметров.")
+	fmt.Println("__________________________________")
+
+	// Программа расчета периода роста бамбука до кондиционной высоты.
+	fmt.Println("4.2 Расчет периода роста бамбука до кондиционной высоты.")
+	var bambooHeight float32 = 100   //Начальная высота саженца (см)
+	var heightStandard float32 = 300 //Стандартная высота
+	var dailyIncrement float32 = 50  //Суточный рост (см)
+	var growthLoss float32 = 20      //Потери роста за ночь (см)
+
+	gainDaily := dailyIncrement - growthLoss                        //Суточный прирост бамбука
+	periodMaturation := (heightStandard - bambooHeight) / gainDaily //Период созревания бамбука
+
+	fmt.Println("Достижение высоты бамбука", heightStandard, "сантиметров наступит через", int(periodMaturation), "полных суток")
+	fmt.Println("__________________________________")
+
+	// Калькулятор расчитывает высоту бамбука в зависимости от вида гусениц и сорта бамбука.
+	fmt.Println("4.3 Калькулятор роста бамбука.")
+
+	fmt.Println("Введите расчетный период (сутки)")
+	var billingPeriod float32
+	fmt.Scan(&billingPeriod)
+
+	fmt.Println("Введите начальную высоту саженца (см)")
+	var heightPlant float32
+	fmt.Scan(&heightPlant)
+
+	fmt.Println("Введите суточный прирост бамбука (см)")
+	var growthBamboo float32
+	fmt.Scan(&growthBamboo)
+
+	growth := growthBamboo * billingPeriod //Расчет прироста в дневное время
+
+	fmt.Println("Введите потери роста за ночь (см)")
+	var nightLosses float32
+	fmt.Scan(&nightLosses)
+
+	nights := int(billingPeriod)            //Количество ночей
+	losses := nightLosses * float32(nights) //Расчет потери роста в ночное время
+	heightPlant += growth - losses
+
+	fmt.Println("Высота бамбука через", billingPeriod, "суток будет", heightPlant, "сантиметров.")
+	fmt.Println("__________________________________")
+
+	// Калькулятор расчитывает время достижения целевой высоты бамбука в зависимости от вида гусениц и сорта бамбука.
+	fmt.Println("4.4 Калькулятор времени созревания бамбука.")
+
+	fmt.Println("Введите целевую высоту бамбука (см)")
+	var specifiedHeight int
+	fmt.Scan(&specifiedHeight)
+
+	fmt.Println("Введите сорт бамбука:")
+	var varietyBamboo string
+	fmt.Scan(&varietyBamboo)
+
+	fmt.Println("Введите начальную высоту саженца (см)")
+	var plantHeight int
+	fmt.Scan(&plantHeight)
+
+	fmt.Println("Введите суточный прирост бамбука (см)")
+	var bambooGrowth int
+	fmt.Scan(&bambooGrowth)
+
+	fmt.Println("Введите вид гусеницы")
+	var typeyCaterpillar string
+	fmt.Scan(&typeyCaterpillar)
+
+	fmt.Println("Введите потери роста за ночь (см)")
+	var lossesNight int
+	fmt.Scan(&lossesNight)
+
+	dailyGain := bambooGrowth - lossesNight                         //Суточный прирост бамбука
+	maturationPeriod := (specifiedHeight - plantHeight) / dailyGain //Период созревания бамбука
+
+	fmt.Println("Достижение высоты", specifiedHeight, "сантиметров для бамбука сорта", varietyBamboo, "при наличии гусеницы", typeyCaterpillar, "наступит через", maturationPeriod, "полных суток.")
+	fmt.Println("__________________________________")
+
+	// Программа обмена местами значений переменных.
+	fmt.Println("5. Повышаем градус сложности.")
+	a = 42
+	b = 153
+	fmt.Println("a:", a)
+	fmt.Println("b:", b)
+
+	a, b = b, a // Преимущество способа в лаконичности кода
+	// Способ не работает, если переменные разных типов. Пример: a := 42, b := 153.0
+	fmt.Println("a:", a)
+	fmt.Println("b:", b)
+	fmt.Println("---------End------------")
+}

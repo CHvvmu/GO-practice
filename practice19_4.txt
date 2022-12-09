@@ -1,0 +1,94 @@
+/*19.4 Практическая работа
+Что входит в работу:
+1. Написать функцию, которая производит слияние отсортированных массивов.
+2. Отсортировать массив пузырьком.*/
+package main
+
+import (
+	"fmt"
+)
+
+const size1 = 4
+const size2 = 5
+const summ = size1 + size2
+
+func arrayFusion1(array1 [size1]int, array2 [size2]int) [summ]int {
+	sliseArray1 := array1[0:]
+	sliseArray2 := array2[0:]
+	var final [summ]int
+	sliseArray1 = append(sliseArray1, sliseArray2...)
+	for i := 0; i < summ; i++ {
+		final[i] = sliseArray1[i]
+	}
+	return final
+}
+
+func arrayFusion2(a1 [4]int, a2 [5]int) [9]int {
+	i1 := 0 // индекс первого элемента в массиве array1
+	i2 := 0 // индекс первого элемента в массиве array2
+	var final [9]int
+	iS := 0 // начало сводного массива
+
+	for i := 0; i < 9; i++ {
+		if i1 <= 3 && i2 <= 4 && a1[i1] < a2[i2] { // копируем наименьший элемент array1 в final
+			final[iS] = a1[i1]
+			iS++
+			i1++
+		} else if i1 <= 3 && i2 <= 4 && a1[i1] > a2[i2] { // копируем наименьший элемент array2 в final
+			final[iS] = a2[i2]
+			iS++
+			i2++
+		} else if i1 <= 3 && i2 <= 4 && a1[i1] == a2[i2] { //копируем элементы array (1-2) при их совпадении
+			final[iS] = a1[i1]
+			iS++
+			final[iS] = a2[i2]
+			iS++
+			i1++
+			i2++
+			// копируем оставшиеся элементы
+		} else if i2 > 4 && i1 <= 3 {
+			final[iS] = a1[i1]
+			iS++
+			i1++
+		} else if i1 > 3 && i2 <= 4 {
+			final[iS] = a2[i2]
+			iS++
+			i2++
+		}
+	}
+	return final
+}
+func main() {
+	// Функция производит слияние двух отсортированных массивов
+	// длиной четыре и пять в один массив длиной девять.
+	fmt.Println("Задание  1. Слияние отсортированных массивов.")
+
+	//Последовательное слияние массивов
+	var sortedArray1 = [size1]int{1, 2, 3, 4}
+	var sortedArray2 = [size2]int{5, 6, 7, 8, 9}
+	finalArray := arrayFusion1(sortedArray1, sortedArray2)
+	fmt.Println("Результат последовательного соединения двух массивов", finalArray)
+
+	//Слияние массивов с сортировкой
+	array1 := [4]int{2, 4, 6, 7}
+	array2 := [5]int{1, 4, 5, 8, 9}
+	finalArray2 := arrayFusion2(array1, array2)
+	fmt.Println("Результат слияния двух массивов с сортировкой:", finalArray2)
+	fmt.Println("_______________________________________________________")
+
+	// Программа сортирует пузырьком массив длиной шесть.
+	fmt.Println("Задание 2. Сортировка пузырьком.")
+
+	var buffer int
+	var mixArray = [6]int{87, 77, 65, 7, 6, 5}
+	for i := 0; i < 6; i++ {
+		for i := 0; i < 5; i++ {
+			if mixArray[i] > mixArray[i+1] {
+				buffer = mixArray[i+1]
+				mixArray[i+1] = mixArray[i]
+				mixArray[i] = buffer
+			}
+		}
+	}
+	fmt.Println("Массив отсортирован по возрастанию:", mixArray)
+}

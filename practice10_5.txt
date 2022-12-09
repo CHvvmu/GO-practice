@@ -1,0 +1,78 @@
+/*10.5 Практическая работа
+Что входит в работу:
+1. Разложение ex в ряд Тейлора.
+2. Проблемы округления процентов. */
+
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+func faktorial(n float64) float64 {
+	for i := n - 1; i > 0; i-- {
+		n *= i
+	}
+	return n
+}
+
+func main() {
+
+	// Программа вычисяет экспоненту посредством разложени в ряд Тейлора с заданной пользователем точностью.
+	fmt.Println("Задание 1. Разложение ex в ряд Тейлора.")
+
+	fmt.Println("Введите значение степени 'x':")
+	var x float64
+	fmt.Scan(&x)
+
+	fmt.Println("Введите до какого знака после запятой вычислить значение:")
+	var d float64
+	fmt.Scan(&d)
+
+	epsilon := 1 / math.Pow(10, d) //Определяем предел точности (знак после запятой)
+	rowEuler := 1.0
+	stepBack := 0.0
+	var n = 1.0
+	for {
+		ex := math.Pow(x, n) / faktorial(n)
+		rowEuler += ex
+		if math.Abs(rowEuler-stepBack) < epsilon {
+			fmt.Println("Экспонента  = ", rowEuler)
+			break
+		}
+		n++
+		stepBack = rowEuler
+	}
+	fmt.Println("_______________________________________________________")
+
+	// Программа вычисяет проценты используя дробную часть чсла.
+	fmt.Println("Задание 2. Проблемы округления процентов.")
+
+	fmt.Println("Введите сумму вклада:")
+	var deposit float64
+	fmt.Scan(&deposit)
+
+	fmt.Println("Введите ежемесячный процент:")
+	var interest float64
+	fmt.Scan(&interest)
+
+	fmt.Println("Введие количество лет:")
+	var period float64
+	fmt.Scan(&period)
+
+	var balance float64
+
+	for i := 1; i <= int(period*12); i++ {
+		monthlyIncome := deposit * interest / 100
+		deposit += monthlyIncome
+		summ := deposit
+		round := int(deposit * 100)
+		deposit = float64(round) / 100
+		balance += summ - deposit
+	}
+	fmt.Println("Сумма к получению вкладчиком:", deposit)
+	fmt.Println("Сумма зачислена в пользу банка:", balance)
+
+	fmt.Println("---------End------------")
+}

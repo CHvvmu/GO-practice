@@ -1,0 +1,65 @@
+/*21.6 Практическая работа
+Что входит в работу:
+1. Написать функцию для расчётов по формуле в задании.
+2. Написать функцию, которая на вход принимает анонимную функцию, а внутри оборачивает её в defer.*/
+
+package main
+
+import (
+	"fmt"
+)
+
+func calculationDifferentTypes(x int16, y uint8, z float32) float32 {
+	return 2*float32(x) + float32(y*y) - 3/z
+}
+
+func multiFunction(s string, x, y int, fn func(int, int) int) {
+
+	for i := 0; i < 1; i++ {
+		defer fmt.Println(fn(x, y))
+		fmt.Printf("%s выполнено: ", s)
+		if y == 0 {
+			fmt.Println("печать ЗАПРЕЩЕНА")
+			break
+		} else {
+			fmt.Println("печать разрешена")
+		}
+	}
+}
+
+func main() {
+
+	// Функция производящая вычисления.
+	fmt.Println("Задание  1. Расчёт по формуле.")
+	var x int16
+	var y uint8
+	var z float32
+	fmt.Println("Ведите 3 числа через пробел:")
+	fmt.Scan(&x, &y, &z)
+
+	//Анонимная функция производит вычисления
+	valueS := func(x int16, y uint8, z float32) float32 { return 2*float32(x) + float32(y*y) - 3/z }
+
+	fmt.Println("Результат расчета анонимной функции")
+	fmt.Println("равен:", valueS(x, y, z))
+
+	fmt.Println("Результат расчета функции 'calculationDifferentTypes'")
+	fmt.Println("равен:", calculationDifferentTypes(x, y, z))
+
+	fmt.Println("--------------------------------")
+
+	// Функция на вход принимает функцию вида A func(int, int) int,
+	// а внутри оборачивает и вызывает её при выходе (через defer).
+	fmt.Println("Задание  2. Анонимные функции.")
+
+	multiplication := func(x, y int) int { return x * y }
+	adding := func(x, y int) int { return x + y }
+	fission := func(x, y int) int { return x / y }
+
+	multiFunction("умножение ", 10, 5, multiplication)
+	multiFunction("сложение ", 10, 5, adding)
+	multiFunction("деление ", 10, 0, fission)
+
+	fmt.Println("---------End------------")
+
+}

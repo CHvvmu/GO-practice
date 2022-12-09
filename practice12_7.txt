@@ -1,0 +1,317 @@
+/*12.7 Практическая работа
+Что входит в работу:
+1. Работа с файлами.
+2. Интерфейс io.Reader.
+3. Уровни доступа.
+4. Пакет ioutil.
+5. Комбинации круглых скобок.* */
+
+package main
+
+import (
+	"bufio"
+	"bytes"
+	"fmt"
+	"io"
+	_ "io"
+	"io/ioutil"
+	"log"
+	"os"
+	_ "strings"
+	"time"
+)
+
+func readConsol() string { // Вариант 1. Функция читает с консоли строку с пробелами
+	in := bufio.NewScanner(os.Stdin)
+	in.Scan()
+	if err := in.Err(); err != nil {
+		fmt.Fprintln(os.Stderr, "Ошибка ввода:", err)
+	}
+	return in.Text()
+}
+
+/*
+func readConsol() string {  // Вариант 2. Функция читает с консоли строку с пробелами
+in := bufio.NewReader(os.Stdin)
+str, err := in.ReadString('\n')
+if err != nil {
+  fmt.Println("Ошибка ввода: ", err)
+}
+return str
+}
+}*/
+
+func main() {
+
+	// Программа получает на вход строку, введённую пользователем, а в файл пишет № строки, дату и сообщение.
+	fmt.Println("Задание 1. Работа с файлами.")
+
+	const layout = "2006-01-02 15:04:05 " //layout = "01-02 03:04:05PM '06 -0700" - магическая дата ('06 или 2006) для создания макета представления времени
+
+	file, err := os.Create("advert.txt") // Создать файл
+	if err != nil {
+		fmt.Println("Ошибка создания файла", err)
+		return
+	}
+	defer file.Close() // Последняя выполняемая функция = закрыть файл
+	i := 1
+	/* В цикле печатаются сообщения с консоли и записываются в файл в формате
+	   1. 2022-06-08 17:16:14  продаю гараж
+	    2. 2022-06-08 17:16:24  нет не продаю
+	    3. 2022-06-08 17:16:35  exit
+	*/
+	for {
+		file.WriteString(fmt.Sprintf(" %d. ", i))
+		time := time.Now()                    //Текущее время
+		file.WriteString(time.Format(layout)) // Макет вывода времени
+
+		fmt.Println("Введите сообщение или 'exit' для выхода:")
+		message := readConsol()
+
+		file.WriteString(fmt.Sprintf(" %s \n", message)) // Запись сообщения с консоли в файл
+		if message == "exit" {
+			break
+		}
+		i++
+	}
+	w := bufio.NewWriter(os.Stdout)
+	w.Flush() // Очищается буфер
+	fmt.Println("_______________________________________________________")
+
+	// Программа читает и выводит в консоль строки из файла без использования ioutil.
+	fmt.Println("Задание 2. Интерфейс io.Reader.")
+
+	file, err := os.Open("advert.txt")
+	if err != nil {
+		fmt.Println("Ошибка открытия файла", err)
+		return
+	}
+	defer file.Close()
+
+	fs, err := file.Stat()
+	if err != nil {
+		fmt.Println("Файл не найден", err)
+	} else if fs.Size() <= 0 {
+		fmt.Println("Файл пустой", err)
+	}
+	buf := make([]byte, fs.Size())
+	if _, err := io.ReadFull(file, buf); err != nil {
+		fmt.Println("Ой! Что-то пошло не так", err)
+		return
+	}
+	fmt.Printf("%s \n", buf)
+
+	fmt.Println("_______________________________________________________")
+
+	// Программа создает текстовый файл только для чтения (в него нельзя записать данные).
+	fmt.Println("Задание 3. Уровни доступа.")
+
+	file2, err := os.Create("ReadOnly.txt")
+	if err := os.Chmod("ReadOnly.txt", 0444); err != nil {
+		fmt.Println(err)
+	}
+	if err != nil {
+		fmt.Println("Ой! Что-то пошло не так", err)
+		return
+	}
+	defer file2.Close()
+
+	file, err := os.Open("ReadOnly.txt")
+	if err != nil {
+		fmt.Println("Ошибка открытия файла", err)
+		return
+	}
+	file2.WriteString("To fear viruses is not to go on the Internet")
+
+	buf := make([]byte, 20)
+	if _, err := io.ReadFull(file, buf); err != nil {
+		fmt.Println("Ошибка чтения файла", err)
+		return
+	}
+	w := bufio.NewWriter(os.Stdout)
+	w.Flush()
+
+	fmt.Println("_______________________________________________________")
+
+	// Программа повторяет решения Заданий 1 и 2 с использованием ioutil.
+	fmt.Println("Задание 4. Пакет ioutil.")
+
+	const layout = "2006-01-02 15:04:05 " //layout = "01-02 03:04:05PM '06 -0700" - магическая дата ('06 или 2006)
+	var b bytes.Buffer
+	i := 1
+	for {
+		b.WriteString(fmt.Sprintf(" %d. ", i))
+		time := time.Now()
+		b.WriteString(time.Format(layout))
+
+		fmt.Println("Введите сообщение или 'exit' для выхода:")
+		message := readConsol()
+
+		b.WriteString(fmt.Sprintf(" %s \n", message))
+		if message == "exit" {
+			break
+		}
+		i++
+	}
+	filename := "advert2.txt"
+	if err := ioutil.WriteFile(filename, b.Bytes(), 0644); err != nil {
+		log.Fatal(err)
+	}
+
+	file, err := os.Open(filename)
+	if err != nil {
+		fmt.Println("Ошибка открытия файла", err)
+		return
+	}
+	defer file.Close()
+
+	result, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%s", string(result))
+
+	fmt.Println("_______________________________________________________")
+	
+		// Программа на вход принимает число (int) и для него генерирует все возможные комбинации круглых скобок.
+		fmt.Println("Задание 5 (по желанию). Комбинации круглых скобок.")
+
+		package main
+
+import (
+	"strings"
+	_"bytes"
+	"fmt"
+)
+
+
+	func pseudoCode(s string) bool { // Проверка правильности скобочной воследовательности
+		counter := 0
+		for i := 0; i < len(s); i++ {
+			if s[i] == '(' {
+				counter++
+			} else if s[i] == ')' {
+				counter--
+			}
+		}
+		return counter == 0
+	}
+	
+	func sequenceGenerator(n int) string {
+		str := ""
+		counter_open := 0
+		counter_close := 0
+	
+		for i := 0; i < n; i++ { //Запуск. Первая комбинаци пар скобок
+	
+			switch {
+			case counter_open+counter_close == 2*n:
+				return str
+			case counter_open < n:
+				counter_open++
+				str += "("
+				fallthrough
+			case counter_open > counter_close:
+				counter_close++
+				str += ")"
+			}
+		}
+		return str
+	}
+	// Генератор скобочных последовательностей
+	func generate(open, closing int, str string, result *[]string) {
+		if open == 0 {
+			*result = append(*result, str+strings.Repeat(")", closing))
+			return
+		}
+		if closing > open {
+			generate(open, closing-1, str+")", result)
+		}
+		generate(open-1, closing, str+"(", result)
+	}
+	
+	func main() {
+	
+		var s string = "()()()" // Скобочная последовательность
+		n := len(s) / 2         // Количество пар скобок
+	
+		fmt.Println("Длина", len(s), pseudoCode(s))
+
+		if pseudoCode(s) {
+			fmt.Printf("Скобочная последовательность %d пар скобок правильная\n", n)
+		} else {
+			fmt.Printf("Скобочная последовательность %d пар скобок не имеет решения\n", n)
+		}	
+		fmt.Println("Возможные комбинации пар скобок", sequenceGenerator(n))
+
+//Задание исходных данных для генератора скобочных последовательностей
+result := make([]string, 0)
+k := 3
+generate(k, k, "", &result)
+fmt.Print(result)
+fmt.Println("")
+		
+
+
+
+
+	fmt.Println("Ведите число парных скобок")
+	var num int = 3
+	//fmt.Scan(&num)
+
+	str := make([]byte, 0)
+	//result := []byte("")
+
+	str = append(str, bytes.Repeat([]byte("("), num)...)
+	str = append(str, bytes.Repeat([]byte(")"), num)...)
+	fmt.Println(string(str))
+	if num == 1 {
+		fmt.Println("()")
+	}
+	//result = append(result, str...)
+	for j := 1; j < num; j++ {
+		for i := 1; i < len(str)-1; i++ {
+			if str[i] != ')' {
+				continue
+			} else if str[i] == ')' {
+				str[i] = '('
+				str[i-1] = ')'
+			}
+			//result = append(result, str...)
+			fmt.Println(string(str))
+		}
+	}
+		//fmt.Println(string(result))
+
+		// Скобочная последовательность
+	m := 3
+	str2 := make([]byte, 0)
+
+	for i := 0; i < m; i++ {
+		str2 = append(str2, '(')
+	}
+	for i := 0; i < m; i++ {
+		str2 = append(str2, ')')
+	}
+	fmt.Println(string(str2))
+
+	for i := m; i > 1; i-- {
+		if str2[i] == ')' {
+			str2[i] = '('
+			str2[i-1] = ')'
+			fmt.Println(string(str2))
+		}
+	}
+		for i := m; i > 1; i-- {
+			if str2[i] == '(' {
+				str2[i] = ')'
+				str2[i+1] = '('
+				fmt.Println(string(str2))
+			}
+		}
+
+}
+
+		fmt.Println("---------End------------")
+	
+}

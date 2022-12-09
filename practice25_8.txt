@@ -1,0 +1,48 @@
+/*25.8 Практическая работа
+Что входит в работу:
+1. Написать программу для нахождения подстроки в кириллической строке.
+Программа должна запускаться с помощью команды:
+go run main.go --str "строка для поиска" --substr "поиска".*/
+
+package main
+
+import (
+	"flag"
+	"fmt"
+	"strings"
+)
+
+type Color string
+
+const (
+	ColorBlack  Color = "\u001b[30m"
+	ColorRed    Color = "\u001b[31m"
+	ColorGreen        = "\u001b[32m"
+	ColorYellow       = "\u001b[33m"
+	ColorBlue         = "\u001b[34m"
+	ColorReset        = "\u001b[0m"
+)
+
+// Меняет цвет сообщения
+
+func lineSearch(color Color, message, str, substr string) {
+	result := strings.Contains(str, substr)
+	fmt.Println(string(color), result, message)
+}
+
+func main() {
+	str := flag.String("str", "строка не указана", "строка для поиска")
+	substr := flag.String("substr", "нет субстроки", "искомый паттерн")
+
+	flag.Parse()
+
+	fmt.Println(ColorYellow, "str:", *str)
+	fmt.Println(ColorYellow, "substr:", *substr)
+	result := strings.Contains(*str, *substr)
+	if result {
+		lineSearch(ColorGreen, "- есть совпадение", *str, *substr)
+		return
+	}
+	lineSearch(ColorRed, "- совпадений нет", *str, *substr)
+	fmt.Println("-----------End--------------")
+}

@@ -1,0 +1,144 @@
+/*23.6 Практическая работа
+Что входит в работу:
+1. Написать функцию для разделения чётных и нечётных чисел в массиве.
+2. Написать функцию, которая ищет в нескольких предложениях символ в последнем слове.*/
+
+package main
+
+import (
+	"bytes"
+	"fmt"
+	"math/rand"
+	"strconv"
+	"strings"
+	"time"
+)
+
+const n = 10
+
+func arrayEvenOdd(m [n]int) (even, odd []int) { // формирует из массива 2 массива четных и нечетных чисел
+
+	for _, v := range m {
+		if v%2 == 0 {
+			even = append(even, v)
+		} else {
+			odd = append(odd, v)
+		}
+	}
+	return even, odd
+}
+
+func characterIndexWord(str []string, rune []rune) [][]string { //получает []string и []rune, возвращает 2D массив
+
+	var mD2 [][]string
+
+	var strByte = bytes.Equal(stringToByte(str), nil) //проверка []string на nil
+	var runeByte = bytes.Equal(runeToByte(rune), nil) //проверка []rune на nil
+
+	if strByte && runeByte || (strByte || runeByte) { // возвратит ошибку
+		mD1 := []string{"ошибка", "массив пуст"}
+		mD2 = append(mD2, mD1)
+	} else {
+		var index1 string
+		for i := 0; i < len(rune); i++ {
+			chars := strconv.QuoteRune(rune[i]) //конвертация rune и string
+			for _, v := range str {
+				index := strings.IndexRune(v, rune[i]) // поиск совпадения rune с первым байтом string
+				if index == -1 {
+					index1 = "нет символа"
+				} else {
+					index1 = strconv.Itoa(index) // конвертация int  в string
+				}
+			}
+			mD := []string{chars, "position", index1} //формирует 2D массив
+			mD2 = append(mD2, mD)
+		}
+	}
+	return mD2
+}
+
+func stringToByte(s []string) []byte { //проверка слайса []string (если пусто, то возвращает пустой слайс)
+	var strByte []byte
+	for _, v := range s {
+		b := "" + v
+		strByte = []byte(b)
+	}
+	return strByte
+}
+
+func runeToByte(r []rune) []byte { //проверка слайса []rune (если пусто, то возвращает пустой слайс)
+	var runeByte []byte
+	var b1 byte
+	for _, v := range r {
+		b := byte(v)
+		b1 += b
+		if b1 == 0 {
+			return nil
+		} else {
+			runeByte = append(runeByte, b1)
+		}
+	}
+	return runeByte
+}
+
+func main() {
+
+	// Функция принимает массив чисел, а возвращает два массива: один из чётных чисел, второй из нечётных.
+	fmt.Println("Задание  1. Чётные и нечётные.")
+
+	rand.Seed(time.Now().UnixNano()) //генерируем массив случайных чисел
+	var m1 [n]int
+	for i := 0; i < n; i++ {
+		m1[i] = rand.Intn(10 * n)
+	}
+	fmt.Printf("\nСгенерирован массив случайных чисел:")
+	fmt.Println(m1)
+	evenArr, oddArr := arrayEvenOdd(m1)
+	fmt.Printf("\nИз функции получены массивы:\nчетных чисел: %d\nнечетных чисел: %d\n", evenArr, oddArr)
+
+	fmt.Println("-----------------------------------------------")
+
+	// Функция принимает на вход  массив предложений (длинных строк) и массив символов типа rune,
+	// а возвращает 2D-массив, где на позиции [i][j] стоит индекс вхождения символа j из chars
+	// в последнее слово в предложении i (строку надо разбить на слова и взять последнее).
+	fmt.Println("Задание 2. Поиск символов в нескольких строках.")
+
+	//Исходные массивы
+	sentences := [4]string{"Hello world", "Hello Skillbox", "Привет Мир", "Привет Skillbox"}
+	chars := [5]rune{'H', 'E', 'L', 'П', 'М'}
+	str := sentences[3:] //слайс массива string
+	ch := chars[:]       //слайс массива rune
+
+	fmt.Printf("\nВ последнем слове %s массива слов\n", sentences[3:])
+	fmt.Printf("байты символов начинаются с позиций:\n\n")
+
+	mD2 := characterIndexWord(str, ch) //получен 2D массив от функции
+
+	for _, v := range mD2 { //вывод 2D массива на печать
+		var s1 string
+		for _, s := range v {
+			s1 += s + " "
+		}
+		fmt.Println(s1)
+	}
+
+	fmt.Println("-----------End--------------")
+}
+
+//--------------------------------------------------------------------------------
+//Печать массива Rune 1-3 однобайтовые, 4-5 двухбайтовые
+//[72 69 76 1055 1052]
+	chars := [5]rune{'H','E','L','П','М'}
+	fmt.Println(chars)
+//Печать слайса Rune строки 0-6 двухбайтовые(12 байт), 7-16 однобайтовые(9 байт) Всего 21 байт, но 15 Rune
+//[1055 1088 1080 1074 1077 1090 ||32 83 107 105 108 108 98 111 120] для "76" -индекс 20
+	str := "Привет Skillbox" // 15 символов (рун)
+	strRune := []rune(str)
+	fmt.Println(strRune)
+
+//Печать слайса Byte строки (21 байт)
+//[208 159 208 160 208 152 208 146 208 149 208 162 ||32 83 75 73 76 76 66 79 88]
+	strByte := []byte(str)
+	fmt.Println(strByte)
+//---------------------------------------------------------------------------------------
+

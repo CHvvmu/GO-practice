@@ -1,0 +1,59 @@
+/*11.5 Практическая работа
+Что входит в работу:
+1. Определение количества слов, начинающихся с большой буквы.
+2. Вывод чисел, содержащихся в строке. */
+
+package main
+
+import (
+	"fmt"
+	"strings"
+	"unicode"
+)
+
+func onlyNumbers(w string) bool {
+	for i := 0; i < len(w); i++ {
+		symbol := rune(w[i])
+		if !unicode.IsNumber(symbol) { // Игнорируем иные символы кроме чисел
+			return false
+		}
+	}
+	return true
+}
+
+func main() {
+
+	// Программа выводит количество слов, начинающихся с большой буквы в строке.
+	fmt.Println("Задание 1. Определение количества слов, начинающихся с большой буквы в строке.")
+
+	strA := "Go is an Open source programming Language that makes it Easy to build simple, reliable, and efficient Software"
+
+	wordArrau := strings.Fields(strA)
+	var counter int
+	for _, word := range wordArrau {
+		if word[0] >= 65 && word[0] <= 90 {
+			counter += 1
+		}
+	}
+	fmt.Printf("Строка содержит %d слов с большой буквы.\n", counter)
+
+	fmt.Println("_______________________________________________________")
+
+	// Программа выводит все части строки, которые можно привести к числу в десятичном формате.
+	fmt.Println("Задание 2. Вывод чисел, содержащихся в строке.")
+
+	strB := "a10 10 20b 20 30c30 30 dd"
+
+	arrayWords := strings.Fields(strB)
+	var numbers string
+
+	for i := 0; i < len(arrayWords); i++ {
+		word := arrayWords[i]
+		if onlyNumbers(word) {
+			numbers = numbers + word + " "
+		}
+	}
+	fmt.Println("В строке содержатся числа в десятичном формате:", numbers)
+
+	fmt.Println("---------End------------")
+}

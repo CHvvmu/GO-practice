@@ -1,0 +1,173 @@
+/*7.5 Практическая работа
+Что входит в работу:
+1. Зеркальные билеты.
+2. Шахматная доска.
+3. Вывод ёлочки.
+4. По желанию. Счастливые билеты.*/
+
+package main
+
+import (
+	"fmt"
+	"sort"
+	"strconv"
+)
+
+func main() {
+
+	// Программа определяет количество пар зеркальных чисел в интервале от 100000 до 999999.
+	fmt.Println("Задание 1. Зеркальные билеты.")
+
+	//Определяем основные переменные программы
+	startInterval := 100000
+	endInterval := 999999
+	var currentNumber int
+	var pseudoMirror int
+	counter := 0
+
+	for i := startInterval; i <= endInterval; i++ {
+		currentNumber = i
+		currentNumberString := strconv.Itoa(currentNumber)
+		//  Определяем место каждой цифры в числе
+		placeA, _ := strconv.Atoi(string(currentNumberString[0]))
+		placeB, _ := strconv.Atoi(string(currentNumberString[1]))
+		placeC, _ := strconv.Atoi(string(currentNumberString[2]))
+		placeD, _ := strconv.Atoi(string(currentNumberString[3]))
+		placeE, _ := strconv.Atoi(string(currentNumberString[4]))
+		placeF, _ := strconv.Atoi(string(currentNumberString[5]))
+
+		//  Вычисляем зеркльые числа
+		//	псевдоЗеркало = текущееЧисло - 9*placeA + 9*placeB //2х значное число
+		//	псевдоЗеркало = текущееЧисло - 99*placeA  + 99*placeC //3х значное число
+		//	псевдоЗеркало = текущееЧисло + 999*placeD + 90*placeC  - 90*placeB - 999*placeA //4х значное число
+		//	псевдоЗеркало = текущееЧисло + 9999*placeE + 990*placeD  - 990*placeB - 9999*placeA //5-ти значное число
+
+		pseudoMirror = currentNumber + 99999*placeF + 9990*placeE + 900*placeD - 900*placeC - 9990*placeB - 99999*placeA //6-ти значное число
+
+		if pseudoMirror == currentNumber {
+			counter++
+		}
+	}
+	fmt.Printf("Количество зеркальных билетов среди всех шестизначных номеров\n от 100000 до 999999:\n %v", counter)
+	fmt.Println("_______________________________________________________")
+
+	//Программа выводит графически шахматную доску заданного размера.
+	fmt.Println("Задание 2. Шахматная доска.")
+L:
+	fmt.Println("Введите ширину")
+	var width int
+	fmt.Scan(&width)
+	if width > 8 {
+		fmt.Println("Горизонталь шахматной доски равна 8 клеток")
+		goto L
+	}
+	fmt.Println("Введите высоту")
+	var vertical int
+	fmt.Scan(&vertical)
+
+	//Определяем основные переменные программы
+	var black string = "  "
+	var white string = "*"
+	//	горизонталь := make([]string)
+	var horizontal [8]string //Создаем массив горизонтали шахматной доски
+	for i := 0; i < vertical; i++ {
+		if i%2 == 0 {
+			for j := 0; j < width; j++ {
+				if j%2 != 0 {
+					horizontal[j] = white
+				} else if j%2 == 0 {
+					horizontal[j] = black
+				}
+				fmt.Printf("%s", horizontal[j])
+			}
+			fmt.Printf("\n")
+
+		} else if i%2 != 0 {
+
+			for j := 0; j < width; j++ {
+				if j%2 == 0 {
+					horizontal[j] = white
+				} else if j%2 != 0 {
+					horizontal[j] = black
+				}
+				fmt.Printf("%s", horizontal[j])
+			}
+			fmt.Printf("\n")
+		}
+	}
+	fmt.Println("_______________________________________________________")
+
+	//Программа выводит графически елочку заданной высоты.
+	fmt.Println("Задание 3. Вывод ёлочки.")
+
+	fmt.Println("Введите высоту елочки")
+	var height int
+	fmt.Scan(&height)
+
+	for i := 1; i < height+1; i++ {
+
+		counter := height - i
+
+		for j := 0; j < counter; j++ {
+			fmt.Print(" ")
+		}
+		for n := 0; n < height-counter; n++ {
+			if n == 0 {
+				fmt.Print("*")
+			} else {
+				for m := 0; m < 2; m++ {
+					fmt.Print("*")
+				}
+			}
+		}
+		fmt.Print("\n")
+	}
+	fmt.Println("_______________________________________________________")
+
+	//Программа определяет максимальное расстояние между счастливыми билетами.
+	fmt.Println("Задание 4 (по желанию). Счастливые билеты.")
+
+	fmt.Println("Введите начало диапазона (четное количество цифр в числе)")
+	var start int
+	fmt.Scan(&start)
+
+	fmt.Println("Введите конец диапазона (четное количество цифр в числе)")
+	var end int
+	fmt.Scan(&end)
+
+	//Определяем основные переменные программы
+	//startInterval := 100000
+	//endInterval := 999999
+	meter := 0           //Измеритель расстояний
+	var spectrum ([]int) //Массив счастливых билетов
+	prior := start       //Предыдущий счастливый билет
+
+	for i := start; i <= end; i++ {
+		currentNum := strconv.Itoa(i)
+		sum1, sum2 := 0, 0
+
+		for j := 0; j <= len(currentNum)-1; j++ {
+			digitalStr := string(currentNum[j])
+			digit, _ := strconv.Atoi(digitalStr)
+
+			switch { //Суммируем половинки числа
+			case j < 3:
+				sum1 += digit
+			case j >= 3:
+				sum2 += digit
+			}
+		}
+		if sum1 == sum2 { //Определяем счастливое числа
+			fortunate := i
+			meter = fortunate - prior //Определяем расстояние между счастливыми билетами
+			prior = fortunate
+			spectrum = append(spectrum, meter)
+		}
+	}
+	sort.Ints(spectrum) //Сортируем массив
+	n := len(spectrum)  //Конечное число = максимальному расстоянию между счастливыми билетами
+	fmt.Printf("Минимальное количество билетов, которое нужно купить, чтобы среди них оказался счастливый:")
+	fmt.Println(spectrum[n-1])
+
+	fmt.Println("---------End------------")
+}

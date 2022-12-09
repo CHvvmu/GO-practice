@@ -1,0 +1,133 @@
+/*29.6 Практическая работа
+Что входит в работу:
+Задание 1. Конвейер
+Задание 2. Graceful shutdown.*/
+package main
+
+import (
+	"bufio"
+	"context"
+	"fmt"
+	"os"
+	"os/signal"
+	"strconv"
+)
+
+func Square(c chan int) { // функция читает из канала число и отправляет в канал произведение
+	num := <-c
+	c <- num * num
+}
+
+func Multiplication(c chan int) { // функция читает из канала число и отправляет в канал произведение
+	num := <-c
+	c <- num * 2
+}
+
+func main() {
+
+	/*	Программа с помощью горутин последовательно подсчитывает квадрат и произведение числа,
+		полученного из стандартного ввода.
+		   1. Программа принимает числа из стандартного ввода в бесконечном цикле и передаёт число в горутину.
+		   2. Квадрат: горутина высчитывает квадрат этого числа и передаёт в следующую горутину.
+		   3. Произведение: следующая горутина умножает квадрат числа на 2.
+		   4. При вводе «стоп» выполнение программы останавливается.
+	*/
+	fmt.Println("Задание  1. Конвейер.")
+
+	var invit = "Ведите число для вычислений: ('стоп' для выхода)"
+	scann := bufio.NewScanner(os.Stdin)
+	fmt.Println(invit)
+
+	for scann.Scan() {
+		fmt.Printf("Ввод : %v\n", scann.Text())        //ввод числа
+		if scann.Text() == "" || scann.Text() == " " { // проверка на пустой ввод
+			fmt.Println(invit)
+			continue
+		}
+		if scann.Text() == "стоп" { // остановка программы
+			fmt.Println("Программа остановлена!")
+			break
+		}
+		num, err := strconv.Atoi(scann.Text())
+		if err != nil {
+			fmt.Println("ошибочный ввод: введите число")
+			continue
+		}
+
+		squareChan := make(chan int)
+		multiplicatChan := make(chan int)
+
+		go Square(squareChan)
+		go Multiplication(multiplicatChan)
+
+		squareChan <- num         //пишем введенное число в канал "квадрат"
+		squareVal := <-squareChan //читаем число из канала "квадрат"
+		fmt.Println("Квадрат :", squareVal)
+
+		multiplicatChan <- squareVal        //пишем полученное число в канал "произведение"
+		multiplicatVal := <-multiplicatChan //читаем число из канала "произведение"
+
+		fmt.Println("Произведение :", multiplicatVal)
+	}
+	fmt.Println("--------------------------------")
+
+	/*	Программа выводит квадраты натуральных чисел на экран,
+		а после получения сигнала ^С обрабатывает этот сигнал, пишет «выхожу из программы» и выходит.
+	*/
+	fmt.Println("Задание  2. Graceful shutdown (Мягкое отключение).")
+
+	var number int
+	fmt.Println("Введите число для инициализации вычислений:")
+	fmt.Println("прервать процесс сtrl + C")
+	fmt.Scan(&number)
+
+	ctx := context.Background()            //создаем контекст
+	ctx, cancel := context.WithCancel(ctx) //производим контекст с отменой
+
+	signalChan := make(chan os.Signal, 1) //создаем канал для сигнала прерывания
+	signal.Notify(signalChan)
+
+	defer func() { //отложенная отмена контекста и освобождение ресурсов
+		signal.Stop(signalChan)
+		cancel()
+	}()
+
+	go func() {
+		select {
+		case <-signalChan: //первый сигнал отмены контекста
+			fmt.Println("получен сигнал -> прекращаю расчеты")
+			cancel()
+		case <-ctx.Done():
+		}
+		<-signalChan //второй сигнал (жесткий выход)
+		fmt.Println("выхожу из программы")
+		os.Exit(1)
+	}()
+
+	for sq := range GeneratorSquaresNumber(ctx, number) {
+		fmt.Println("квадрат числа равен", sq)
+		if sq == 97693456 { //естественное завершение программы (10000 вычислений)
+			break
+		}
+	}
+	fmt.Println("--------------End----------------")
+}
+
+func GeneratorSquaresNumber(ctx context.Context, number int) <-chan int {
+	snChan := make(chan int)
+	n := number
+	go func() {
+		for number < 10000 { //ограничиваем вычисления
+			sq := n * n
+			select {
+			case <-ctx.Done(): //прерываем вычисления
+				fmt.Println("Сtrl + C -> завершить программу")
+				return
+			default:
+				snChan <- sq //продолжаем вычислять квадраты чисел
+				n++
+			}
+		}
+	}()
+	return snChan
+}

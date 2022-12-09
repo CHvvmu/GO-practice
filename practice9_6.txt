@@ -1,0 +1,75 @@
+/*9.6 Практическая работа
+Что входит в работу:
+1. Переполнение.
+2. Минимальный тип данных. */
+
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+
+	// Программа подсчитывает, количество переполнений чисел типа uint8, uint16 в диапазоне от 0 до uint32.
+	fmt.Println("Задание 1. Переполнение.")
+	var MaxUint8 int
+	var MaxUint16 int
+	var MaxUint32 = 4294967295
+	var counterMaxUint8 int
+	var counterMaxUint16 int
+
+	for i := 0; i <= MaxUint32; i++ {
+		MaxUint16 += 1
+		if MaxUint16 == 65535 {
+			MaxUint16 = 0
+			counterMaxUint16 += 1
+		}
+		MaxUint8 = MaxUint8 + 1
+		if MaxUint8 == 255 {
+			MaxUint8 = 0
+			counterMaxUint8 += 1
+		}
+	}
+	fmt.Println("Переполнений чисел типа uint8 =", counterMaxUint8)
+	fmt.Println("Переполнений чисел типа uint16 =", counterMaxUint16)
+
+	fmt.Println("_______________________________________________________")
+
+	// Программа выводит, в какой минимальный тип данных можно сохранить результат умножения двух чисел
+	fmt.Println("Задание 2. Минимальный тип данных.")
+
+	fmt.Println("Введите 1-е число:")
+	var num1 int16
+	fmt.Scan(&num1)
+
+	fmt.Println("Введите 2-е число:")
+	var num2 int16
+	fmt.Scan(&num2)
+	var output string
+
+	result := int64(num1) * int64(num2)
+
+	switch {
+	case result >= 0 && result <= 255:
+		output = "uint8"
+	case result >= -128 && result <= 127:
+		output = "int8"
+	case result >= 0 && result <= 65535:
+		output = "uint16"
+	case result >= -32768 && result <= 32767:
+		output = "int16"
+	case result >= 0 && result <= 4294967295:
+		output = "uint32"
+	case result >= -2147483648 && result <= 2147483647:
+		output = "int32"
+	case result >= -9223372036854775808 && result <= 9223372036854775807:
+		output = "int64"
+	default:
+		output = "uint64"
+	}
+
+	fmt.Println("Минимальный тип данных для результата умножения =", output)
+
+	fmt.Println("---------End------------")
+}

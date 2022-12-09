@@ -1,0 +1,108 @@
+/*27.7 Практическая работа
+Что входит в работу:
+1. Написать программу, которая считывает ввод с Stdin,
+создаёт структуру student и записывает указатель на структуру
+в хранилище map[studentName]*Student.
+
+Программа должна получать строки в бесконечном цикле,
+создать структуру Student через функцию newStudent,
+сохранить указатель на эту структуру в map, а после получения EOF (ctrl + Z)&(ctrl + D)
+вывести на экран имена всех студентов из хранилища.
+Также необходимо реализовать методы put, get.
+*/
+
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"sort"
+	"strconv"
+	"strings"
+)
+
+type Student struct { // определяем структуру списка студентов
+	name       string
+	age, grade int
+}
+
+func newStudent(name string, age, grade int) *Student { // создаем структуру Student
+	var student Student
+	student.name = name
+	student.age = age
+	student.grade = grade
+	return &Student{student.name, student.age, student.grade}
+}
+
+type List struct { //определяем структуру хеш-таблицы map[studentName] *Student
+	student map[string]*Student
+}
+
+// метод Put добавляет компонент в карту со значением student и ключом name
+func (ls *List) Put(name string, newStudent *Student) map[string]*Student {
+	if ls.student == nil {
+		ls.student = make(map[string]*Student)
+	}
+	ls.student[name] = newStudent
+	return ls.student
+}
+
+// метод Get выводит список всех студентов на экран
+func (l *List) Get(array map[string]*Student) {
+	keys := make([]string, 0, len(array)) //сортируем список по алфавиту
+	for k := range array {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	for _, k := range keys { //вывод списка на экран
+		v := array[k]
+		fmt.Printf("%v %v %v\n", v.name, v.age, v.grade)
+	}
+}
+
+func main() {
+
+	var listFields []string           //слайс полей списка студентов
+	var student *Student              // структура полей списка
+	var array List                    // массив учетных данных студента
+	var hashTable map[string]*Student //учетная хеш-таблица всех студентов
+
+	var invit = "Ведите ФИО, возраст и курс студента"
+	scann := bufio.NewScanner(os.Stdin) //ввод данных студентов (консоль)
+	fmt.Println(invit)
+
+	for scann.Scan() {
+		if scann.Text() == "" || scann.Text() == " " { // проверка на пустой ввод
+			fmt.Println(invit)
+			continue
+		}
+
+		listFields = strings.Fields(scann.Text()) // разделенине полей
+		if len(listFields) < 3 {                  // проверка пустого ввода последующих полей
+			fmt.Println("ошибка: не полный ввод данных")
+			continue
+		}
+
+		name := listFields[0] //имя студента
+
+		age, err := strconv.Atoi(listFields[1])
+		if err != nil {
+			fmt.Println("ошибочный ввод: возраст не число")
+			continue
+		}
+
+		grade, err := strconv.Atoi(listFields[2])
+		if err != nil {
+			fmt.Println("ошибочный ввод: курс не число")
+			continue
+		}
+
+		student = newStudent(name, age, grade) //данные студента
+
+		hashTable = array.Put(name, student) //список всех студентов
+	}
+	array.Get(hashTable) //вывод списка студентов на экран
+
+	fmt.Println("-----------End--------------")
+}

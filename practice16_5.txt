@@ -1,0 +1,31 @@
+/*
+16.5 Практическая работа
+Что входит в работу:
+1. Вывести шахматное поле в консоль, используя циклы.
+*/
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	fmt.Println("Введите ширину и высоту поля")
+	var width, height int
+	fmt.Scan(&width, &height)
+	printChessBoard(width, height)
+	fmt.Println("end")
+}
+
+func printChessBoard(width int, height int) {
+	for row := 0; row < height; row++ {
+		for col := 0; col < width; col++ {
+			if (row+col)%2 == 0 {
+				fmt.Print("*")
+			} else {
+				fmt.Print(" ")
+			}
+		}
+		fmt.Println()
+	}
+}

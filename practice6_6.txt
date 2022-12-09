@@ -1,0 +1,208 @@
+/*6.6 Практическая работа
+Что входит в работу:
+1. Написание простого цикла.
+2. Сумма двух чисел по единице.
+3. Расчёт суммы скидки.
+4. Предыдущее занятие на if.
+5. По желанию. Задача на постепенное наполнение корзин разной ёмкости.
+6. По желанию. Движение лифта.*/
+
+package main
+
+import (
+	"fmt"
+	_ "math"
+	"sort"
+	_ "strconv"
+)
+
+func main() {
+
+	// Программа выводит на экран все значения от нуля до указанного числа.
+	fmt.Println("Задание 1. Написание простого цикла.")
+
+	fmt.Println("Введите произвольное число:")
+	var start int
+	fmt.Scan(&start)
+
+	discret := 0
+
+	for {
+		fmt.Println(discret)
+		discret += 1
+		if discret > start {
+			fmt.Println("Все числа от '0' до", start, "выведены")
+			break
+		}
+	}
+	fmt.Println("__________________________________")
+
+	// Программа прибавляет к первому числу по единице, пока не достигнет суммы двух чисел.
+	fmt.Println("Задание 2. Сумма двух чисел по единице.")
+M:
+	fmt.Println("Введите первое число:")
+	var num1 int
+	fmt.Scan(&num1)
+
+	fmt.Println("Введите второе число:")
+	var num2 int
+	fmt.Scan(&num2)
+
+	sumNumbers := num1 + num2
+
+	if num1 > num2 {
+		fmt.Println("Повторите ввод так, чтобы второе число было больше")
+		goto M
+	}
+
+	for {
+		fmt.Println(num1)
+		num1 += 1
+		if num1 > sumNumbers {
+			fmt.Println("Сумма введенных чисел равна:", sumNumbers)
+			break
+		}
+	}
+	fmt.Println("__________________________________")
+
+	// Программа определяет к какой координатной четверти принадлежит точка.
+	fmt.Println("Задание 3. Расчёт суммы скидки.")
+
+	fmt.Println("Введите цену товара:")
+	var itemPrice float32
+	fmt.Scan(&itemPrice)
+L:
+	fmt.Println("Введите размер скидки:")
+	var discount float32
+	fmt.Scan(&discount)
+
+	if discount > 30 {
+		discount = 30
+	} else if discount < 0 {
+		fmt.Println("Число должно быть положительным")
+		goto L
+	}
+
+	totalDiscount := itemPrice * discount / 100
+
+	var maxDiscount float32 = 2000
+	if totalDiscount > maxDiscount {
+		totalDiscount = maxDiscount
+	}
+
+	fmt.Println("Ваша скидка =", totalDiscount, "рублей")
+	fmt.Println("__________________________________")
+
+	// Программа в цикле наполняет три переменные от 0 до 10, 100, и 1000 соответственно.
+	fmt.Println("Задание 4. Предыдущее занятие на if.")
+
+	var val1, val2, val3 int = 0, 0, 0
+	fmt.Println("Наполнение переменнх:")
+	fmt.Println("\tВариант № 1:")
+	//Переменные увеличиваются на один. На печать выводится каждый шаг
+	//Объем наполнения уменьшен для наглядности
+	fmt.Println("Первая:\tВторая:\tТретья:")
+
+	for i := 0; i < 31; i++ {
+		if i < 11 {
+			fmt.Println("  ", val1+i, "\t  ", val2+i, "\t  ", val3+i)
+		}
+		if i > 11 && i < 21 {
+			fmt.Println("\t  ", val2+i, "\t  ", val3+i)
+		}
+		if i > 21 && i < 31 {
+			fmt.Println("\t\t  ", val3+i)
+		}
+	}
+	fmt.Print("   -        -       -\n\n")
+	fmt.Println("\tВариант № 2:")
+	//Переменные увеличиваются на один. На печать выводится конечный результат
+	for i := 0; i < 1000; i++ {
+		if i < 10 {
+			val1 += 1
+		}
+		if i < 100 {
+			val2 += 1
+		}
+		if i < 1000 {
+			val3 += 1
+		}
+	}
+
+	fmt.Println(" ", val1, "\t  ", val2, "\t  ", val3)
+	fmt.Println("_______________________________")
+
+	fmt.Println("---------End------------")
+
+	//Программа последовательно фиксирует наличие пассажиров на этажах (от 1 до 24 ) и расчитывает их доставку на первый этаж. Максимальная грузоподъемность 2 человека.
+	fmt.Println("Задание 6 (по желанию). Движение лифта.")
+
+	for {
+		fmt.Println("Лифт обслуживает 24 этажа")
+		fmt.Println("Введите номер этажа с ожидающим пассажиром:")
+		var pass1 int
+		fmt.Scan(&pass1)
+
+		fmt.Printf("Второй: ")
+		var pass2 int
+		fmt.Scan(&pass2)
+
+		fmt.Printf("Третий: ")
+		var pass3 int
+		fmt.Scan(&pass3)
+
+		s := []int{}
+		sl := append(s, pass1, pass2, pass3)
+		sort.Ints(sl)
+		min := sl[0]
+		mid := sl[1]
+		max := sl[2]
+
+		fmt.Println("Этаж = 1. Движение вверх")
+		for i := 1; i <= 22; i++ { //Движение лифта вверх
+			fmt.Println("Этаж ^", i+1)
+		}
+		fmt.Println("Этаж = 24. Движение вниз")
+
+		var commuters int
+	Elevator:
+		for i := 24; i >= 3; i-- { //Движение лифта вниз
+			fmt.Println("Этаж v", i-1)
+			switch {
+			case i-1 == max:
+				fmt.Printf("Посадка пассажира. ")
+				commuters = 1
+				fmt.Println("Всего: ", commuters)
+			case i-1 == mid:
+				fmt.Printf("Посадка пассажира. ")
+				commuters += 1
+				fmt.Println("Всего: ", commuters)
+			case commuters == 2:
+				//max, mid = 0, 0
+				continue
+			case i-1 == min:
+				fmt.Printf("Посадка пассажира. ")
+				commuters += 1
+				fmt.Println("Всего: ", commuters)
+				min = 0
+			}
+		}
+
+		fmt.Println("Этаж = 1. ")
+		commuters, max, mid = 0, 0, 0 //Лифт свободен
+		fmt.Println("Всего пассажиров: ", commuters)
+		fmt.Println("Движение вверх")
+
+		for i := 1; i <= 22; i++ { //Движение лифта вверх
+			fmt.Println("Этаж ^", i+1)
+		}
+		fmt.Println("Этаж = 24. Лифт 'СТОП' ")
+		if min == 0 {
+			fmt.Println("При вызове лифта -> Движение вниз")
+			break
+		}
+		goto Elevator
+	}
+	fmt.Println("---------End------------")
+
+}

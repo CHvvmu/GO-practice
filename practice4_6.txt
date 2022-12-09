@@ -1,0 +1,189 @@
+/*4.6 Практическая работа ()
+Что входит в работу:
+1. Баллы ЕГЭ.
+2. Три числа.
+3. Банкомат.
+4. Три числа: ещё попытка.
+5. Ресторан.
+6. По желанию. Студенты.
+8. По желанию. Прогрессивный налог.*/
+
+package main
+import (
+	"fmt"
+)
+func main() { 
+// Программа верификации ЕГЭ.
+    fmt.Println("Задание 1. Баллы ЕГЭ.")
+    fmt.Println("Введите результат первого экзамена:")
+        var exam1 int
+        fmt.Scan(&exam1)    
+    fmt.Println("Введите результат второго экзамена:")
+        var exam2 int
+        fmt.Scan(&exam2)
+    fmt.Println("Введите результат третьего экзамена:")
+        var exam3 int
+        fmt.Scan(&exam3)
+    sumPoints := exam1 + exam2 + exam3 //Набрано баллов
+    passingScore := 275 //Проходной балл    
+        if sumPoints >= passingScore {
+            fmt.Println("Поздравляем! Вы поступили.")
+        }
+
+        if sumPoints < passingScore {
+            fmt.Println("Сумма проходных баллов:", passingScore)
+            fmt.Println("Количество набранных баллов:", sumPoints)
+            fmt.Println("Вы не поступили.")
+        }
+fmt.Println("__________________________________")
+
+// Программа поиска большего числа.
+    fmt.Println("Задание 2. Три числа.")
+    fmt.Println("Введите первое число:")
+        var number1 int
+        fmt.Scan(&number1)
+    fmt.Println("Введите второе число:")
+        var number2 int
+        fmt.Scan(&number2)
+    fmt.Println("Введите третье число:")
+        var number3 int
+        fmt.Scan(&number3)    
+    var max int
+    if number1 > number2 && number1 > number3 {
+            max = number1
+        } else if number2 > number1 && number2 > number3 {
+            max = number2
+        } else {
+            max = number3    
+        }    
+    if 5 > number1 && 5 > number2 && 5 > number3 {
+        fmt.Println("Среди введённых чисел нет числа больше 5.")       
+    } else if 5 < max {
+        fmt.Println("Среди введённых чисел есть число больше 5. Это:", max)
+    }
+fmt.Println("__________________________________")
+
+// Программа проверяет допустимость введённой пользователем суммы средств.
+    fmt.Println("Задание 3. Банкомат.")
+    fmt.Println("Введите сумму снятия со счёта:")
+        var cashAmount int
+        fmt.Scan(&cashAmount)    
+    if cashAmount > 100000 {
+        fmt.Println("Операция не возможна. Сумма превышает лимит.")       
+    } else if cashAmount % 100 != 0 {
+        fmt.Println("Запрашиваемая сумма не доступна")
+    } else {
+        fmt.Println("Операция успешно выполнена.\nВы сняли", cashAmount, "рублей.")
+    }
+fmt.Println("__________________________________")    
+
+// Программа выводит количество чисел, которые больше или равны пяти.
+    fmt.Println("Задание 4. Три числа: ещё попытка.")
+    fmt.Println("Введите первое число:")
+        var numeral1 int
+        fmt.Scan(&numeral1)
+    fmt.Println("Введите второе число:")
+        var numeral2 int
+        fmt.Scan(&numeral2)
+    fmt.Println("Введите третье число:")
+        var numeral3 int
+        fmt.Scan(&numeral3)     
+    index := 0
+    if numeral1 >= 5 {
+        index ++
+    }    
+    if numeral2 >= 5 {
+        index ++
+    }    
+    if numeral3 >= 5 {
+         index ++
+    }     
+    fmt.Println("Среди введённых чисел", index, "больше или равны 5.")
+fmt.Println("__________________________________")  
+    
+// Программа рассчитывает сумму к оплате.
+fmt.Println("Задание 5. Ресторан.")
+    fmt.Println("Введите день недели:")
+        var weekday int
+        fmt.Scan(&weekday)
+    fmt.Println("Введите число гостей:")
+        var guestCount int
+        fmt.Scan(&guestCount)
+    fmt.Println("Введите сумму чека:")
+        var checkAmount int
+        fmt.Scan(&checkAmount)
+    total := checkAmount    
+    if weekday == 1 {
+        discount := checkAmount * 10 / 100 //Скидка по понедельникам
+        fmt.Println("Скидка по понедельникам:", discount) 
+        total -= discount
+    }    
+        if checkAmount > 10000 && weekday == 5 {
+            discountCheck := checkAmount * 5 / 100 //Скидка по пятницам
+            fmt.Println("Скидка по пятницам:", discountCheck) 
+            total -= discountCheck
+        } 
+            if guestCount > 5 {
+                surcharge := checkAmount * 10 / 100 //Надбавка на облуживание
+                fmt.Println("Надбавка на обслуживание:", surcharge) 
+                total += surcharge
+            }     
+    fmt.Println("Сумма к оплате:", total)
+    fmt.Println("__________________________________")  
+ 
+//Программа сортировки студентов
+fmt.Println("Задание 6. Студенты")    
+    var totalStudents int
+	fmt.Println("Введите число студентов")
+	fmt.Scan(&totalStudents)
+	var totalGroup int
+	fmt.Println("Введите число групп")
+	fmt.Scan(&totalGroup)  
+        for i := 0; i < totalStudents; {         
+            for j := 1; j <= totalGroup; j++{
+                fmt.Println("Введите фамилию или порядковый номер студента")
+                var numberStudent string
+                fmt.Scan(&numberStudent)
+                i++            
+                fmt.Println("Студент", numberStudent, "в группу №", j)
+                fmt.Println()
+                    if i >= totalStudents {
+                        break
+                    } 
+            }
+        }
+    fmt.Println("Студенты распределены по группам")
+    fmt.Println("__________________________________")
+
+// Программа рассчитывает сумму к оплате.
+    fmt.Println("Задание 7. Прогрессивный налог.")   
+    var profit float32
+	fmt.Println("Введите Ваш доход:")
+	fmt.Scan(&profit)    
+        if profit > 50000 {
+            taxes := 0.3 * (profit - 50000) + 0.2 * (50000 - 10000) + 0.13 * 10000
+            fmt.Println("C дохода", profit, "рублей необходимо заплатить:", taxes)              
+        }else if profit <= 50000 && profit > 10000 {
+            taxes := 0.2 * (profit - 10000) + 0.13 * 10000
+            fmt.Println("C дохода", profit, "рублей необходимо заплатить:", taxes)              
+        }else if profit < 10000 && profit > 0  {
+            taxes := 0.13 * profit
+            fmt.Println("C дохода", profit, "рублей необходимо заплатить:", taxes)            
+        }else {
+            fmt.Println("Произошла ошибка при чтении входных данных. Пожалуйста, попробуйте еще раз") 
+        }
+    fmt.Println("---------End------------")
+
+// Таблица умножения
+for i  :=  1;  i  <  10;  i++ {
+        for j  :=  1;  j  <  10;  j++ {
+            fmt.Print(i * j, "\t")
+        }        
+
+    //fmt.Println(factorial(4))   // 24
+func factorial(n uint) uint{ 
+    if n == 0{
+        return 1
+    }    
+    return n * factorial(n - 1)  
+}

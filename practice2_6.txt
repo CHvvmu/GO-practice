@@ -1,0 +1,150 @@
+/*2.5 Практическая работа (https://go.dev/play/p/bOKsExY4yFh)
+
+Что входит в работу:
+1. Улучшаем гонщика.
+2. Калькулятор стоимости товара.
+3. Время, время!
+4. Непонятная квитанция.*/
+
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+
+	//Исправлен код программы: значение скорости рассчитывается автоматически.
+
+	fmt.Println("Задание 1. Улучшаем гонщика")
+	var lap int = 4
+	var engine int = 254
+	var wheels int = 93
+	var steeringWheel int = 49
+	var wind int = 21
+	var rain int = 17
+	speed := engine + wheels + steeringWheel - wind - rain
+
+	fmt.Println("===================")
+	fmt.Print("Супергонки. Круг ", lap, "\n")
+	fmt.Println("===================")
+	fmt.Print("Шумахер (", speed, ")\n")
+	fmt.Println("===================")
+	fmt.Println("Водитель: Шумахер")
+	fmt.Print("Скорость: ", speed, "\n")
+	fmt.Println("-------------------")
+	fmt.Println("Оснащение")
+	fmt.Print("Двигатель: +", engine, "\n")
+	fmt.Print("Колёса: +", wheels, "\n")
+	fmt.Print("Руль: +", steeringWheel, "\n")
+	fmt.Println("-------------------")
+	fmt.Println("Действия плохой погоды")
+	fmt.Print("Ветер: −", wind, "\n")
+	fmt.Print("Дождь: −", rain, "\n")
+	fmt.Println("++++++++++++++++++++")
+
+	//Программа для расчёта полной стоимости товара со скидкой
+
+	fmt.Println("Задание 2. Калькулятор стоимости товара")
+	сostGoods := 6400
+	costShipping := 350
+	discounts := 700
+	total := сostGoods + costShipping - discounts
+
+	fmt.Println("Стоимость товара:", сostGoods)
+	fmt.Println("Стоимость доставки:", costShipping)
+	fmt.Println("Размер скидки:", discounts)
+	fmt.Println("--------------")
+	fmt.Println("Итого:", total)
+	fmt.Println("++++++++++++++++++++")
+
+	//Программа расчёта количества клиентов, обслуживаемых за смену.
+
+	fmt.Println("Задание 3. Время, время!.")
+	fmt.Println("Введите длительность смены в минутах:")
+	durationShift := 480
+	fmt.Println("Сколько минут клиент делает заказ:")
+	timeOrder := 2
+	fmt.Println("Сколько минут кассир собирает заказ:")
+	timeExecution := 4
+	totalClients := durationShift / (timeOrder + timeExecution)
+	fmt.Println("-------------------------------------------")
+	fmt.Println("За смену длиной", durationShift, "минут кассир успеет обслужить", totalClients, "клиентов.")
+	fmt.Println("++++++++++++++++++++")
+
+	//Программа расчета поквартирного взноса средств за ремонт дома
+
+	fmt.Println("Задание 4. Непонятная квитанция")
+	totalRepairCosts := 4000000
+	fmt.Println("Сумма, указанная в квитанции:", totalRepairCosts)
+	blocksInHouse := 10
+	fmt.Println("Подъездов в доме:", blocksInHouse)
+	apartmentInBlock := 40
+	fmt.Println("Квартир в каждом подъезде:", apartmentInBlock)
+	flatFee := totalRepairCosts / (blocksInHouse * apartmentInBlock)
+fmt.Println("-------------------------------------------")
+	fmt.Println("Каждая квартира должна платить по", flatFee, "рублей.")
+}
+
+
+
+
+//Учебные задачки:
+package main
+
+import (
+	"fmt"
+)
+func main() {
+   fmt.Println("1. Калькулятор стоимости товара")
+  fmt.Println("Введите стоимость товара:")
+	var сostGoods int
+  fmt.Scan(&сostGoods)
+  
+  fmt.Println("Введите cтоимость доставки:")
+	var costShipping int
+  fmt.Scan(&costShipping)
+  
+  fmt.Println("Введите размер скидки:")
+	var discounts int
+  fmt.Scan(&discounts)
+  
+	total := сostGoods + costShipping - discounts
+  fmt.Println("--------------")
+  
+  fmt.Println("ЧЕК")
+	fmt.Println("Стоимость товара:", сostGoods)
+	fmt.Println("Стоимость доставки:", costShipping)
+	fmt.Println("Размер скидки:", discounts)
+	fmt.Println("--------------")
+	fmt.Println("Итого:", total)
+
+  fmt.Println("2. Регистрация")
+  fmt.Println("Укажите Ваше имя:")
+  var username string
+  fmt.Scan(&username)
+  fmt.Println("Введите пароль:")
+  var password string
+  fmt.Scan(&password)
+  fmt.Println("Укажите Ваш возраст:")
+  var age int
+  fmt.Scan(&age)
+  fmt.Println("--------------")
+  fmt.Println("Поздравляю", username, "теперь вы зарегистрированы!")
+  fmt.Println("Ваш пароль:", password)
+  fmt.Println("Ваш возраст:", age)
+
+  fmt.Println("3. Вход")
+
+  fmt.Println("Введите логин:")
+  var username1 string
+  fmt.Scan(&username1)
+  
+  fmt.Println("Введите пароль:")
+  var password1 string
+  fmt.Scan(&password1)
+              
+  fmt.Println("-------------------------")
+  fmt.Print("[", username, "], вы успешно зашли!")
+  
+}

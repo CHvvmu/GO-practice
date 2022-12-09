@@ -1,0 +1,129 @@
+/*14.6 Практическая работа
+Что входит в работу:
+1. Функция, возвращающая результат.
+2. Функция, возвращающая несколько значений.
+3. Именованные возвращаемые значения.
+4. Область видимости переменных.
+*/
+
+package main
+
+import (
+	"fmt"
+	"math/rand"
+	"time"
+)
+
+var val1 = 1
+var val2 = 2
+var val3 = 3
+
+func evenСheck(a int) bool {
+	return a%2 == 0
+}
+
+func coordinateGenerator(x, y int) (int, int) {
+	return rand.Intn(x), rand.Intn(y)
+}
+
+func coordinateModifier(n, m int) (int, int) {
+	n = 2*n + 10
+	m = -3*m - 5
+	return n, m
+}
+
+func multiplier(d int) (b int) {
+	b = d * d
+	return
+}
+
+func totalizer(s int) (p int) {
+	p = s + s
+	return
+}
+
+func adding1(m int) int {
+	x := m + val1 + val2
+	return x
+}
+
+func adding2(k int) int {
+	y := k + val1 + val3
+	return y
+}
+
+func adding3(j int) int {
+	z := j + val2 + val3
+	return z
+}
+
+func main() {
+
+	// Функция получает число и возвращает true, если число четное, и false, если нечётное.
+	fmt.Println("Задание 1. Функция, возвращающая результат.")
+
+	var a int
+	fmt.Println("Введите число для проверки четности:")
+	fmt.Scan(&a)
+	if evenСheck(a) {
+		fmt.Printf("Ответ: %t. Да число четное\n", evenСheck(a))
+	} else {
+		fmt.Printf("Ответ: %t. Нет число нечетное\n", evenСheck(a))
+	}
+
+	fmt.Println("_______________________________________________________")
+
+	// Программа, через функцию генерирует по две координаты для 3-х случайных точек,
+	// а затем с помощью другой функции преобразует эти координаты.
+	fmt.Println("Задание 2. Функция, возвращающая несколько значений.")
+
+	rand.Seed(time.Now().UnixNano())
+	x1, x2 := coordinateGenerator(10, 20)
+	y1, y2 := coordinateGenerator(30, 40)
+	z1, z2 := coordinateGenerator(50, 60)
+
+	fmt.Printf("Координаты случайной точки 'x':  x1 = %d; x2 = %d\n", x1, x2)
+	fmt.Printf("Координаты случайной точки 'y':  y1 = %d; y2 = %d\n", y1, y2)
+	fmt.Printf("Координаты случайной точки 'z':  z1 = %d; z2 = %d\n\n", z1, z2)
+
+	x1changed, x2changed := coordinateModifier(x1, x2)
+	y1changed, y2changed := coordinateModifier(y1, y2)
+	z1changed, z2changed := coordinateModifier(z1, z2)
+
+	fmt.Printf("Измененные координаты точки 'x':  x1 = %d; x2 = %d\n", x1changed, x2changed)
+	fmt.Printf("Измененные координаты точки 'y':  y1 = %d; y2 = %d\n", y1changed, y2changed)
+	fmt.Printf("Измененные координаты точки 'z':  z1 = %d; z2 = %d\n", z1changed, z2changed)
+
+	fmt.Println("_______________________________________________________")
+
+	// Программа получает число и с помощью двух функций преобразует его.
+	// Первая умножает, а вторая прибавляет число, используя именованные возвращаемые значения.
+	fmt.Println("Задание 3. Именованные возвращаемые значения.")
+
+	var d int
+	fmt.Println("Введите число для модификации:")
+	fmt.Scan(&d)
+
+	dModified := multiplier(d)
+	result := totalizer(dModified)
+	fmt.Printf("Введенное чисо = %d.\nМодифицированное число = %d.\n", d, result)
+
+	fmt.Println("_______________________________________________________")
+
+	// Программа 3-х функций с глобальными переменными
+	fmt.Println("Задание 4. Область видимости переменных.")
+
+	var g int
+	fmt.Println("Введите число для запуска программы:")
+	fmt.Scan(&g)
+
+	f1 := adding1(g)
+	f2 := adding2(f1)
+	f3 := adding3(f2)
+
+	fmt.Printf("Результат от 1-й функции adding1: %d\n", f1)
+	fmt.Printf("Результат от 2-й функции adding2: %d\n", f2)
+	fmt.Printf("Результат от 3-й функции adding3: %d\n", f3)
+
+	fmt.Println("---------End------------")
+}

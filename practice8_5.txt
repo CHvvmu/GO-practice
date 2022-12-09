@@ -1,0 +1,84 @@
+/*8.5 Практическая работа
+Что входит в работу:
+1. Времена года.
+2. Дни недели.
+3. (по желанию). Расчёт сдачи.*/
+
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+
+	// Программа определяет время года по названию месяца.
+	fmt.Println("Задание 1. Времена года.")
+M:
+	fmt.Println("Введите месяц:")
+	var month string
+	fmt.Scan(&month)
+
+	switch month {
+	case "декабрь", "январь", "февраль":
+		fmt.Println("Время года — зима")
+	case "март", "апрель", "май":
+		fmt.Println("Время года — весна")
+	case "июнь", "июль", "август":
+		fmt.Println("Время года — лето")
+	case "сентябрь", "октябрь", "ноябрь":
+		fmt.Println("Время года — осень")
+	default:
+		fmt.Println("Проверьте правильность названия месяца")
+		goto M
+	}
+	fmt.Println("_______________________________________________________")
+
+	//Программа, при вводе дня недели, выводит развёрнутый список всех последующих рабочих дней.
+	fmt.Println("Задание 2. Дни недели.")
+L:
+	fmt.Println("Введите будний день недели: пн, вт, ср, чт, пт:")
+	var weekday string
+	fmt.Scan(&weekday)
+
+	switch weekday {
+	case "пн":
+		fmt.Print("понедельник\nвторник\nсреда\nчетверг\nпятница\n")
+	case "вт":
+		fmt.Print("вторник\nсреда\nчетверг\nпятница\n")
+	case "ср":
+		fmt.Print("среда\nчетверг\nпятница\n")
+	case "чт":
+		fmt.Print("четверг\nпятница\n")
+	case "пт":
+		fmt.Printf("пятница/n")
+	default:
+		fmt.Println("Введите сокращенное обозначение. Например -> 'ср'")
+		goto L
+	}
+
+	fmt.Println("_______________________________________________________")
+
+	//Программа использует функцию для расчета сдачи за покупку.
+	fmt.Println("Задание 3. (по желанию). Расчёт сдачи.")
+
+	bills := []int{5, 5, 10, 20, 20}
+	fmt.Println("Ввод:", bills)
+
+	fmt.Println("Вывод: ", lemonadeChange(bills))
+
+	fmt.Println("---------End------------")
+}
+func lemonadeChange(bills []int) bool {
+	var summ int
+	for i := 0; i < 3; i++ {
+		summ += bills[i]
+	}
+	switch {
+	case summ > 20 || bills[3] > 5 && bills[4] != 5:
+		return false
+	default:
+		return true
+	}
+	fmt.Println("---------End------------")
+}
